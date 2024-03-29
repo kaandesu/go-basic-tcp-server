@@ -47,6 +47,7 @@ func (s *Server) acceptLoop() {
 		conn, err := s.ln.Accept()
 		if err != nil {
 			fmt.Printf("accept error: %s", err)
+			break
 		}
 
 		fmt.Printf("new connection to the server: %s \n", conn.RemoteAddr())
@@ -62,7 +63,7 @@ func (s *Server) readLoop(conn net.Conn) {
 		n, err := conn.Read(buf)
 		if err != nil {
 			fmt.Printf("read error: %s", err)
-			continue
+			break
 		}
 
 		msg := buf[:n]
@@ -82,7 +83,7 @@ func main() {
 
 	go func() {
 		for msg := range server.msgch {
-			fmt.Printf("reacieved message from connection (%s): %s", msg.from, string(msg.payload))
+			fmt.Printf("recieved message from connection (%s): %s", msg.from, string(msg.payload))
 		}
 	}()
 
